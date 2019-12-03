@@ -26,15 +26,12 @@ jobs:
         echo '##vso[task.setvariable variable=is_locked]false';
       fi
     displayName: Are dependencies locked?
-  - script: cargo check --locked
-    condition: and(succeeded(), eq(variables.is_locked, 'true'))
-    displayName: Check that Cargo.lock is satisfiable
   - script: cargo check --workspace --bins --examples --tests
     displayName: Check compilation w/ default features
   - ${{ if eq('true', parameters.all_features) }}:
-    - script: cargo check --all --bins --examples --tests --all-features
+    - script: cargo check --workspace --bins --examples --tests --all-features
       displayName: Check compilation w/ all features
 
   - ${{ if ne('false', parameters.benches) }}:
-    - script: cargo check --benches --all
+    - script: cargo check --benches --workspace
       displayName: Check benchmarks
