@@ -20,14 +20,14 @@ jobs:
     strategy:
       matrix:
         Linux:
-          vmImage: ubuntu-16.04
+          vmImage: ubuntu-latest
         MacOS:
-          vmImage: macOS-10.14
+          vmImage: macOS-latest
         Windows:
-          vmImage: windows-2019
+          vmImage: windows-latest
   ${{ if ne('true', parameters.cross) }}:
     variables:
-      vmImage: ubuntu-16.04
+      vmImage: ubuntu-latest
   pool:
     vmImage: $(vmImage)
   services:
@@ -43,22 +43,22 @@ jobs:
     env:
       FEATURES: ${{ join(',', parameters.features) }}
   - ${{ if ne('true', parameters.single_threaded) }}:
-    - script: cargo test --all $(features)
+    - script: cargo test --workspace $(features)
       displayName: Run tests
       env:
         ${{ insert }}: ${{ parameters.envs }}
   - ${{ if eq('true', parameters.single_threaded) }}:
-    - script: cargo test --all $(features) -- --test-threads=1
+    - script: cargo test --workspace $(features) -- --test-threads=1
       displayName: Run tests (single-threaded)
       env:
         ${{ insert }}: ${{ parameters.envs }}
   - ${{ if and(eq('true', parameters.test_ignored), ne('true', parameters.single_threaded)) }}:
-    - script: cargo test --all $(features) -- --ignored
+    - script: cargo test --workspace $(features) -- --ignored
       displayName: Run ignored tests
       env:
         ${{ insert }}: ${{ parameters.envs }}
   - ${{ if and(eq('true', parameters.test_ignored), eq('true', parameters.single_threaded)) }}:
-    - script: cargo test --all $(features) -- --ignored --test-threads=1
+    - script: cargo test --workspace $(features) -- --ignored --test-threads=1
       displayName: Run ignored tests (single-threaded)
       env:
         ${{ insert }}: ${{ parameters.envs }}

@@ -10,7 +10,7 @@ jobs:
  - job: tarpaulin
    displayName: tarpaulin
    pool:
-     vmImage: ubuntu-16.04
+     vmImage: ubuntu-latest
    # this is sad: we need to spin up the service containers even if the token
    # isn't set, since we can't set a service in a particular script step.
    # once the fix to

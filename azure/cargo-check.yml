@@ -11,7 +11,7 @@ jobs:
   ${{ if ne(parameters.rust, 'stable') }}:
     displayName: cargo +${{ parameters.rust }} check
   pool:
-    vmImage: ubuntu-16.04
+    vmImage: ubuntu-latest
   steps:
   - template: _setup.yml
     parameters:
@@ -29,7 +29,7 @@ jobs:
   - script: cargo check --locked
     condition: and(succeeded(), eq(variables.is_locked, 'true'))
     displayName: Check that Cargo.lock is satisfiable
-  - script: cargo check --all --bins --examples --tests
+  - script: cargo check --workspace --bins --examples --tests
     displayName: Check compilation w/ default features
   - ${{ if eq('true', parameters.all_features) }}:
     - script: cargo check --all --bins --examples --tests --all-features
